@@ -1,0 +1,1234 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#050816" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="DOWE" />
+  <title>DOWE / ME STUDIO ORBIT</title>
+  <!-- ME Studio Hub Orbit v05 2026-05-11 -->
+  <link rel="apple-touch-icon" href="./icon-180.png" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #02030b;
+  --panel: rgba(9, 14, 34, 0.66);
+  --panel-strong: rgba(12, 18, 42, 0.86);
+  --line: rgba(255,255,255,0.105);
+  --line-hot: rgba(255,91,105,0.44);
+  --text: rgba(247, 250, 255, 0.94);
+  --muted: rgba(212, 224, 247, 0.68);
+  --dim: rgba(205, 218, 248, 0.52);
+  --cyan: #7bd6ff;
+  --amber: #f5c46b;
+  --green: #78f2b7;
+  --red: #ff5b69;
+  --violet: #a48cff;
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --shadow: 0 28px 90px rgba(0,0,0,0.48);
+}
+
+* { box-sizing: border-box; }
+html, body, #root { min-height: 100%; margin: 0; }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #000;
+  color: var(--text);
+  overflow-x: hidden;
+}
+a { color: inherit; }
+button, input { font: inherit; }
+button { color: inherit; }
+
+.app {
+  min-height: 100vh;
+  position: relative;
+  padding: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(123, 214, 255, 0.14), transparent 34%),
+    radial-gradient(circle at 90% 18%, rgba(164, 140, 255, 0.16), transparent 30%),
+    radial-gradient(circle at 58% 105%, rgba(245, 196, 107, 0.1), transparent 30%),
+    #02030b;
+}
+.theme-sin-city {
+  --cyan: #ff4050;
+  --amber: #f5c46b;
+  --green: #ececec;
+  --violet: #ff7b91;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.05), transparent 12%, rgba(255,255,255,0.03) 18%, transparent 22%, rgba(255,0,20,0.12) 30%, transparent 42%),
+    radial-gradient(circle at 50% 0%, rgba(255, 0, 25, 0.18), transparent 36%),
+    #030303;
+}
+
+.space-backdrop { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.space-backdrop::before {
+  content: "";
+  position: absolute; inset: -10%;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.92) 0 1px, transparent 1.4px),
+    radial-gradient(circle, rgba(123,214,255,0.7) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(255,255,255,0.35) 0 1px, transparent 1.3px);
+  background-size: 86px 86px, 164px 164px, 248px 248px;
+  background-position: 12px 28px, 72px 94px, 44px 170px;
+  opacity: .32;
+  animation: starDrift 52s linear infinite;
+}
+.space-backdrop::after {
+  content: "";
+  position: absolute; inset: -20%;
+  background: conic-gradient(from 90deg at 50% 50%, transparent, rgba(123,214,255,0.075), transparent, rgba(245,196,107,0.06), transparent, rgba(164,140,255,0.07), transparent);
+  filter: blur(26px);
+  opacity: .9;
+  animation: nebulaSpin 110s linear infinite;
+}
+.space-backdrop span, .space-backdrop i { position: absolute; border-radius: 999px; transform: rotate(-12deg); }
+.space-backdrop span { border: 1px solid rgba(123, 214, 255, 0.12); box-shadow: 0 0 60px rgba(123, 214, 255, 0.08); }
+.space-backdrop span:nth-child(1) { width: 78vw; height: 22vw; left: 12vw; top: 21vh; }
+.space-backdrop span:nth-child(2) { width: 48vw; height: 13vw; right: -6vw; top: 58vh; border-color: rgba(245,196,107,0.11); }
+.space-backdrop span:nth-child(3) { width: 36vw; height: 10vw; left: -8vw; top: 76vh; border-color: rgba(164,140,255,0.12); }
+.space-backdrop i { width: 36vw; height: 36vw; filter: blur(60px); opacity: .16; }
+.space-backdrop i:nth-child(4) { background: var(--cyan); top: -18vw; left: 7vw; }
+.space-backdrop i:nth-child(5) { background: var(--violet); top: 18vh; right: -18vw; }
+.space-backdrop i:nth-child(6) { background: var(--amber); bottom: -24vw; left: 35vw; opacity: .11; }
+@keyframes starDrift { to { background-position: 124px 70px, 196px 146px, 184px 280px; } }
+@keyframes nebulaSpin { to { transform: rotate(360deg); } }
+
+.glass-panel {
+  position: relative;
+  border: 1px solid var(--line);
+  background: linear-gradient(150deg, rgba(16, 23, 54, 0.82), rgba(6, 9, 25, 0.58));
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.075);
+  backdrop-filter: blur(26px) saturate(130%);
+  -webkit-backdrop-filter: blur(26px) saturate(130%);
+  overflow: hidden;
+}
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(255,255,255,.1), transparent 28%, transparent 72%, rgba(123,214,255,.07));
+  opacity: .72;
+}
+.glass-panel > * { position: relative; z-index: 1; }
+
+.shell { position: relative; z-index: 1; max-width: 1740px; margin: 0 auto; }
+.topbar {
+  position: relative;
+  z-index: 3;
+  max-width: 1740px;
+  margin: 0 auto 16px;
+  display: grid;
+  grid-template-columns: minmax(250px, 0.8fr) minmax(320px, 1.05fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 17px 19px;
+  border-radius: 26px;
+}
+.brand-lockup h1 { margin: 4px 0 0; font-size: clamp(30px, 3.6vw, 54px); line-height: .9; letter-spacing: -.07em; }
+.eyebrow { color: var(--cyan); font: 800 11px/1.2 "JetBrains Mono", monospace; letter-spacing: .18em; text-transform: uppercase; }
+.ticker {
+  min-width: 0; height: 42px;
+  display: flex; align-items: center;
+  padding: 0 16px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.075);
+  color: var(--muted);
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.ticker-inner {
+  display: flex; align-items: center; gap: 12px;
+  white-space: nowrap;
+  animation: tickerScroll 22s linear infinite;
+}
+.ticker-inner span { font-size: 12px; }
+.ticker-inner b { color: var(--dim); }
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.peek-drawer { display: grid; grid-template-rows: 0fr; gap: 8px; transition: grid-template-rows .32s ease, margin-top .24s ease; }
+.peek-drawer.open { grid-template-rows: 1fr; margin-top: 12px; }
+.peek-drawer-inner { overflow: hidden; display: grid; gap: 8px; }.top-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.clock-chip, .status-chip, .theme-button {
+  height: 36px; display: inline-flex; align-items: center; gap: 7px;
+  padding: 0 11px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.09);
+  background: rgba(255,255,255,.05);
+  color: rgba(255,255,255,.78);
+  font: 700 11px "JetBrains Mono", monospace;
+  letter-spacing: .05em;
+}
+.theme-button { cursor: pointer; }
+.theme-button:hover { border-color: rgba(123,214,255,.32); background: rgba(123,214,255,.08); }
+.status-chip.status-heavy, .status-chip.status-critical, .status-chip.status-overload { color: var(--red); border-color: rgba(255,91,105,.28); box-shadow: 0 0 20px rgba(255,91,105,.1); }
+.status-chip.status-busy { color: var(--amber); }
+.status-chip.status-stable, .status-chip.status-light { color: var(--green); }
+
+.hero-grid { display: grid; grid-template-columns: minmax(min-content, 1.08fr) minmax(min-content, .78fr) minmax(min-content, .72fr); gap: 16px; }
+.meter-card, .studio-pulse, .incoming-card, .detail-card, .asset-card, .prompt-card, .timeline-panel { border-radius: var(--radius-lg); padding: 18px; }
+.section-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 15px; }
+.section-head > div { display: inline-flex; align-items: center; gap: 9px; min-width: 0; }
+.section-head svg { color: var(--cyan); }
+.section-head span { font: 800 12px "JetBrains Mono", monospace; letter-spacing: .12em; text-transform: uppercase; }
+.section-head em { color: var(--dim); font-style: normal; font-size: 12px; }
+.section-head button, .incoming-card button, .button-row button, .primary-action, .ghost-action, .template-grid button {
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.055);
+  border-radius: 999px;
+  min-height: 34px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  cursor: pointer;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+.section-head button:hover, .incoming-card button:hover, .button-row button:hover, .primary-action:hover, .ghost-action:hover, .template-grid button:hover { transform: translateY(-1px); border-color: rgba(123,214,255,.34); background: rgba(123,214,255,.08); }
+
+.meter-body { display: grid; grid-template-columns: 1fr 154px; gap: 16px; align-items: center; }
+.vu-meter {
+  position: relative;
+  height: 190px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 50% 118%, rgba(245,196,107,.21), transparent 48%),
+    linear-gradient(180deg, rgba(7,10,24,.8), rgba(0,0,0,.36));
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: inset 0 0 55px rgba(0,0,0,.46), 0 0 40px rgba(123,214,255,.08);
+  overflow: hidden;
+}
+.vu-meter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: .18;
+}
+.meter-arc { position: absolute; left: 8%; right: 8%; top: 32px; height: 120px; border-top: 2px solid rgba(255,255,255,.13); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
+.arc { position: absolute; top: -6px; height: 8px; border-radius: 999px; }
+.arc.green { left: 4%; width: 35%; background: linear-gradient(90deg, transparent, var(--green)); }
+.arc.amber { left: 38%; width: 31%; background: linear-gradient(90deg, var(--green), var(--amber)); }
+.arc.red { right: 4%; width: 34%; background: linear-gradient(90deg, var(--amber), var(--red)); }
+.needle, .forecast-needle {
+  position: absolute;
+  bottom: 30px;
+  left: calc(50% - 1.5px);
+  width: 3px;
+  height: 118px;
+  transform-origin: 50% 100%;
+  transition: transform .9s cubic-bezier(.2,.85,.2,1.04);
+  border-radius: 999px;
+}
+.needle { transform: rotate(var(--needle)); background: linear-gradient(180deg, #fffbe1, var(--amber)); box-shadow: 0 0 20px rgba(245,196,107,.58); }
+.forecast-needle { width: 2px; left: calc(50% - 1px); transform: rotate(var(--forecast)); background: rgba(255,91,105,.78); box-shadow: 0 0 20px rgba(255,91,105,.68); }
+.pivot { position: absolute; left: calc(50% - 15px); bottom: 16px; width: 30px; height: 30px; border-radius: 50%; background: radial-gradient(circle, #fff, #f5c46b 42%, #392809 47%, #02030b 70%); box-shadow: 0 0 32px rgba(245,196,107,.38); }
+.meter-glass { position: absolute; inset: 0; background: linear-gradient(112deg, rgba(255,255,255,.20), transparent 32%, transparent 62%, rgba(255,255,255,.08)); opacity: .42; }
+.meter-glow { position: absolute; left: 50%; bottom: -54px; width: 230px; height: 120px; transform: translateX(-50%); background: radial-gradient(ellipse, rgba(245,196,107,.18), transparent 66%); }
+.scale-mark { position: absolute; bottom: 22px; color: var(--dim); font: 800 11px "JetBrains Mono", monospace; }
+.mark-0 { left: 11%; } .mark-50 { left: 48%; } .mark-100 { right: 9%; }
+.score-stack span { display: block; color: var(--muted); font: 800 10px "JetBrains Mono", monospace; letter-spacing: .14em; }
+.score-stack strong { display: block; font: 800 60px/.85 "JetBrains Mono", monospace; letter-spacing: -.09em; }
+.score-stack p { margin: 12px 0 0; color: var(--muted); font-size: 13px; }
+.score-stack mark { background: transparent; color: var(--red); font-weight: 800; }
+.status-pill { display: inline-flex; margin-top: 10px; padding: 7px 11px; border-radius: 999px; font: 800 11px "JetBrains Mono", monospace; letter-spacing: .12em; }
+.status-pill.status-light, .status-pill.status-stable { color: var(--green); background: rgba(120,242,183,.1); }
+.status-pill.status-busy { color: var(--amber); background: rgba(245,196,107,.11); }
+.status-pill.status-heavy, .status-pill.status-critical, .status-pill.status-overload { color: var(--red); background: rgba(255,91,105,.13); box-shadow: 0 0 20px rgba(255,91,105,.12); }
+.contributor-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 14px; }
+.contributor-grid div { padding: 10px; border-radius: 15px; border: 1px solid rgba(255,255,255,.075); background: rgba(255,255,255,.045); }
+.contributor-grid span { display: block; color: var(--muted); font-size: 11px; }
+.contributor-grid strong { font: 800 19px "JetBrains Mono", monospace; }
+.control-bank { display: grid; gap: 8px; margin-top: 14px; }
+.control-bank label { display: grid; grid-template-columns: 140px 1fr; gap: 10px; align-items: center; color: var(--muted); font-size: 12px; }
+input[type="range"] { width: 100%; accent-color: var(--amber); }
+
+.mini-list { display: grid; gap: 8px; }
+.mini-row { display: grid; grid-template-columns: 58px 1fr; gap: 8px; align-items: center; padding: 10px; border-radius: 15px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.075); }
+.mini-row span { color: var(--dim); font: 800 11px "JetBrains Mono", monospace; }
+.mini-row strong { font-size: 13px; }
+.mini-row small { grid-column: 2; color: var(--dim); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.risk-callout { display: flex; gap: 10px; margin-top: 14px; padding: 13px; border-radius: 18px; border: 1px solid rgba(255,91,105,.2); background: rgba(255,91,105,.085); color: #ffdde1; }
+.risk-callout.ok { border-color: rgba(120,242,183,.18); background: rgba(120,242,183,.06); color: #defced; }
+.risk-callout svg { color: var(--red); flex: none; }
+.risk-callout.ok svg { color: var(--green); }
+.risk-callout strong { display: block; }
+.risk-callout p { margin: 3px 0 0; color: rgba(255,255,255,.72); font-size: 13px; line-height: 1.42; }
+
+.incoming-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.incoming-stats div { padding: 12px; border-radius: 17px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.075); }
+.incoming-stats span { display: block; color: var(--muted); font-size: 11px; }
+.incoming-stats strong { font: 800 29px "JetBrains Mono", monospace; }
+.incoming-stats .danger { border-color: rgba(255,91,105,.28); box-shadow: inset 0 0 22px rgba(255,91,105,.07); }
+.peek-button { width: 100%; margin-top: 12px; justify-content: space-between !important; }
+.incoming-item { width: 100%; text-align: left; border-radius: 15px !important; padding: 10px 11px !important; display: block !important; min-height: 0 !important; }
+.incoming-item span, .incoming-item em { display: block; color: var(--muted); font-size: 11px; font-style: normal; }
+.incoming-item strong { display: block; margin: 3px 0; font-size: 13px; }
+.risk-critical { border-color: rgba(255,91,105,.42) !important; box-shadow: 0 0 24px rgba(255,91,105,.12); }
+.risk-high { border-color: rgba(245,196,107,.34) !important; box-shadow: 0 0 18px rgba(245,196,107,.08); }
+.risk-medium { border-color: rgba(123,214,255,.22) !important; }
+.risk-ok { border-color: rgba(120,242,183,.16) !important; }
+
+.timeline-panel { margin-top: 16px; padding: 18px 18px 20px; overflow: visible; }
+.timeline-head { margin-bottom: 20px; }
+.timeline-scale { position: relative; height: 20px; margin-left: 190px; margin-right: 20px; border-bottom: 1px solid rgba(255,255,255,.07); }
+.timeline-scale span { position: absolute; transform: translateX(-50%); color: var(--dim); font: 800 10px "JetBrains Mono", monospace; white-space: nowrap; }
+.today-line { position: absolute; top: 66px; bottom: 18px; width: 1px; background: linear-gradient(transparent, var(--cyan), transparent); z-index: 2; }
+.today-line span { position: absolute; top: -19px; left: -20px; font: 800 10px "JetBrains Mono", monospace; color: var(--cyan); background: rgba(5,9,24,.95); padding: 2px 7px; border-radius: 999px; border: 1px solid rgba(123,214,255,.28); }
+.timeline-rows { display: grid; gap: 8px; position: relative; }
+.timeline-row, .incoming-band { display: grid; grid-template-columns: 176px 1fr; gap: 14px; align-items: center; min-height: 54px; width: 100%; border: 1px solid rgba(255,255,255,.065); border-radius: 18px; background: rgba(255,255,255,.035); padding: 9px 12px; text-align: left; transition: transform .18s ease, background .18s ease, border-color .18s ease; }
+.timeline-row { cursor: pointer; }
+.timeline-row:hover { transform: translateY(-1px); background: rgba(255,255,255,.055); border-color: rgba(123,214,255,.18); }
+.timeline-row.selected { border-color: rgba(123,214,255,.36); box-shadow: 0 0 24px rgba(123,214,255,.08); }
+.project-label strong { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.project-label span { display: block; margin-top: 3px; color: var(--dim); font-size: 11px; }
+.track { position: relative; height: 32px; border-radius: 999px; background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.055); overflow: visible; }
+.phase { position: absolute; top: 4px; height: 22px; border-radius: 999px; background: linear-gradient(90deg, color-mix(in srgb, var(--project-color), transparent 18%), color-mix(in srgb, var(--project-color), white 15%)); box-shadow: 0 0 18px color-mix(in srgb, var(--project-color), transparent 72%); display: flex; align-items: center; padding: 0 10px; color: rgba(0,0,0,.72); font-size: 10px; font-weight: 800; white-space: nowrap; overflow: hidden; }
+.phase span { overflow: hidden; text-overflow: ellipsis; }
+.phase::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(110deg, transparent, rgba(255,255,255,.32), transparent); animation: phaseSheen 4.6s ease-in-out infinite; }
+.phase-done { opacity: .45; filter: saturate(.6); }
+.phase-next { opacity: .78; }
+.phase-active { outline: 1px solid rgba(255,255,255,.42); }
+@keyframes phaseSheen { 0%, 60% { transform: translateX(-105%); } 100% { transform: translateX(105%); } }
+.h-marker { position: absolute; top: -9px; transform: translateX(-50%); height: 50px; color: var(--project-color); font: 800 10px "JetBrains Mono", monospace; display: grid; place-items: center; }
+.h-marker i { position: absolute; top: 4px; bottom: 4px; width: 2px; background: var(--project-color); box-shadow: 0 0 18px var(--project-color); }
+.signal-track { background: rgba(255,255,255,.02); }
+.signal-dot { position: absolute; top: 4px; transform: translateX(-50%); width: 24px; height: 24px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.08); color: var(--text); cursor: pointer; font: 800 10px "JetBrains Mono", monospace; }
+.signal-dot.risk-critical, .signal-dot.risk-high { background: rgba(255,91,105,.18); color: var(--red); box-shadow: 0 0 18px rgba(255,91,105,.25); }
+.signal-dot.risk-medium { background: rgba(245,196,107,.12); color: var(--amber); }
+.signal-dot.risk-ok { background: rgba(120,242,183,.12); color: var(--green); }
+
+.lower-grid { display: grid; grid-template-columns: minmax(360px, 1.05fr) minmax(320px, .8fr) minmax(310px, .8fr); gap: 16px; margin-top: 16px; align-items: start; }
+h3 { margin: 0; font-size: 24px; letter-spacing: -.04em; }
+h4 { margin: 18px 0 8px; color: var(--muted); font: 800 11px "JetBrains Mono", monospace; letter-spacing: .14em; text-transform: uppercase; }
+p { line-height: 1.52; }
+.muted { margin: 6px 0 0; color: var(--muted); }
+.small-note { margin: 16px 0 0; color: var(--dim); font-size: 12px; }
+.readiness-box { margin-top: 16px; border: 1px solid rgba(255,91,105,.22); background: rgba(255,91,105,.08); border-radius: 18px; padding: 13px; }
+.readiness-box p { margin: 4px 0 0; color: var(--muted); }
+.chip-row { display: flex; gap: 7px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; min-height: 28px; padding: 0 10px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.09); color: rgba(255,255,255,.78); font-size: 12px; }
+.chip.ok { color: var(--green); border-color: rgba(120,242,183,.2); background: rgba(120,242,183,.08); }
+.chip.missing { color: var(--red); border-color: rgba(255,91,105,.28); background: rgba(255,91,105,.09); }
+.asset-links, .source-grid, .template-grid { display: grid; gap: 8px; }
+.asset-links a, .source-grid a { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 11px; border-radius: 999px; text-decoration: none; border: 1px solid rgba(255,255,255,.09); background: rgba(255,255,255,.045); color: rgba(255,255,255,.82); }
+.asset-links a:hover, .source-grid a:hover { border-color: rgba(123,214,255,.3); background: rgba(123,214,255,.08); }
+.button-row { display: flex; gap: 8px; margin-top: 16px; }
+.primary-action { background: rgba(123,214,255,.12) !important; border-color: rgba(123,214,255,.28) !important; }
+.ghost-action { background: rgba(255,255,255,.04) !important; }
+.primary-action.wide { width: 100%; margin-top: 9px; }
+.search-box { height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 14px; border-radius: 999px; border: 1px solid rgba(123,214,255,.18); background: rgba(255,255,255,.05); }
+.search-box svg { color: var(--cyan); }
+.search-box input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--text); }
+.source-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 10px; }
+.asset-list { display: grid; gap: 9px; }
+.asset-list div { padding: 11px; border-radius: 16px; border: 1px solid rgba(255,255,255,.075); background: rgba(255,255,255,.04); }
+.asset-list strong, .asset-list span { display: block; }
+.asset-list span { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.asset-list p { margin: 5px 0 0; color: var(--dim); font-size: 12px; }
+.template-grid button { border-radius: 15px; justify-content: flex-start; padding: 11px !important; min-height: 52px; width: 100%; }
+.template-grid button span { margin-left: auto; color: var(--dim); font-size: 11px; }
+.prompt-block, .real-life-tease { display: flex; gap: 9px; padding: 13px; border-radius: 18px; background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.075); color: rgba(255,255,255,.78); }
+.prompt-block svg, .real-life-tease svg { color: var(--violet); flex: none; }
+.prompt-block p { margin: 0; font-size: 13px; }
+.real-life-tease { color: var(--muted); }
+
+@media (max-width: 1260px) {
+  .hero-grid, .lower-grid { grid-template-columns: 1fr; }
+  .topbar { grid-template-columns: 1fr; }
+  .top-actions { justify-content: flex-start; }
+  .timeline-row, .incoming-band { grid-template-columns: 140px 1fr; }
+  .timeline-scale { margin-left: 154px; }
+}
+@media (max-width: 760px) {
+  .app { padding: 10px; }
+  .meter-body { grid-template-columns: 1fr; }
+  .contributor-grid, .incoming-stats, .source-grid { grid-template-columns: 1fr 1fr; }
+  .timeline-panel { overflow-x: auto; }
+  .timeline-rows, .timeline-scale { min-width: 840px; }
+  .timeline-row, .incoming-band { grid-template-columns: 156px 1fr; }
+}
+
+/* ── Add Incoming Panel ─────────────────────────────────────── */
+.add-panel-overlay {
+  position: fixed; inset: 0; z-index: 50;
+  background: rgba(0,0,8,.62);
+  backdrop-filter: blur(4px);
+  display: flex; justify-content: flex-end;
+  animation: overlayIn .2s ease;
+}
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+.add-panel {
+  width: min(460px, 100vw);
+  height: 100%;
+  background: linear-gradient(160deg, rgba(14,20,50,.97), rgba(5,8,22,.98));
+  border-left: 1px solid rgba(123,214,255,.18);
+  box-shadow: -30px 0 80px rgba(0,0,0,.5);
+  display: flex; flex-direction: column;
+  animation: panelSlideIn .28s cubic-bezier(.2,.9,.3,1);
+  overflow-y: auto;
+}
+@keyframes panelSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+.add-panel-head {
+  padding: 22px 22px 18px;
+  border-bottom: 1px solid rgba(255,255,255,.075);
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0;
+  background: linear-gradient(160deg, rgba(14,20,50,.99), rgba(5,8,22,.99));
+  z-index: 1;
+}
+.add-panel-head h2 { margin: 0; font: 800 18px/.9 "JetBrains Mono", monospace; letter-spacing: -.04em; }
+.add-panel-head .eyebrow { margin-bottom: 4px; }
+.add-panel-close {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: var(--text); cursor: pointer; font-size: 18px;
+  display: grid; place-items: center;
+  transition: background .18s ease, border-color .18s ease;
+}
+.add-panel-close:hover { background: rgba(255,91,105,.12); border-color: rgba(255,91,105,.32); }
+.add-panel-body { padding: 22px; display: grid; gap: 18px; flex: 1; }
+.add-field label {
+  display: block; color: var(--muted);
+  font: 800 10px "JetBrains Mono", monospace;
+  letter-spacing: .14em; text-transform: uppercase;
+  margin-bottom: 7px;
+}
+.add-field input[type="text"],
+.add-field input[type="date"] {
+  width: 100%; padding: 11px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.05);
+  color: var(--text); font: inherit; font-size: 14px;
+  outline: 0;
+  transition: border-color .18s ease;
+}
+.add-field input[type="text"]:focus,
+.add-field input[type="date"]:focus {
+  border-color: rgba(123,214,255,.36);
+  background: rgba(123,214,255,.05);
+}
+.radio-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.radio-group label {
+  display: flex; align-items: center; gap: 9px;
+  padding: 11px 14px; border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.09);
+  background: rgba(255,255,255,.04);
+  cursor: pointer; font-size: 13px; font-weight: 700;
+  color: var(--muted); letter-spacing: 0; text-transform: none;
+  margin: 0;
+  transition: border-color .18s ease, background .18s ease, color .18s ease;
+}
+.radio-group input[type="radio"] { display: none; }
+.radio-group input[type="radio"]:checked + span { color: var(--cyan); }
+.radio-group label:has(input:checked) {
+  border-color: rgba(123,214,255,.32);
+  background: rgba(123,214,255,.08);
+  color: var(--text);
+}
+.checkbox-group { display: flex; flex-wrap: wrap; gap: 7px; }
+.checkbox-group label {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 11px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.09);
+  background: rgba(255,255,255,.04);
+  cursor: pointer; font-size: 12px; font-weight: 700;
+  color: var(--muted); letter-spacing: 0; text-transform: none;
+  margin: 0;
+  transition: border-color .18s ease, background .18s ease, color .18s ease;
+}
+.checkbox-group input[type="checkbox"] { display: none; }
+.checkbox-group label:has(input:checked) {
+  border-color: rgba(120,242,183,.28);
+  background: rgba(120,242,183,.08);
+  color: var(--green);
+}
+.add-panel-footer {
+  padding: 18px 22px;
+  border-top: 1px solid rgba(255,255,255,.075);
+  display: flex; gap: 10px;
+  position: sticky; bottom: 0;
+  background: linear-gradient(0deg, rgba(5,8,22,.99), rgba(5,8,22,.9));
+}
+.add-panel-footer .primary-action { flex: 1; font-size: 13px; font-weight: 800; }
+.add-panel-footer .ghost-action { flex: 0 0 auto; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- CDN: React 18 UMD -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+  <!-- CDN: Lucide icons via importmap + esm.sh (Babel module mode) -->
+  <script type="importmap">
+  {
+    "imports": {
+      "lucide-react": "https://esm.sh/lucide-react@0.383.0"
+    }
+  }
+  </script>
+
+  <!-- CDN: Babel standalone for JSX -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel" data-type="module" data-presets="react">
+    import {
+      AlertTriangle, ArrowUpRight, CalendarDays, ChevronRight, Clock3,
+      Compass, FileText, FolderOpen, Gauge, Layers3,
+      Link as LinkIcon, Plus, Radar, RadioTower, Search,
+      SlidersHorizontal, Sparkles, Star, WandSparkles,
+    } from 'lucide-react';
+
+    const { useState, useEffect, useMemo } = React;
+    const { createRoot } = ReactDOM;
+
+const STORAGE_KEY = 'studio-hub-orbit-v02';
+const DAY = 1000 * 60 * 60 * 24;
+const today = new Date();
+
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const iso = (value) => new Date(value).toISOString().slice(0, 10);
+const daysBetween = (a, b) => Math.round((new Date(b) - new Date(a)) / DAY);
+const niceDate = (value) => new Date(value).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+const defaultData = {
+  settings: {
+    selfInputWeight: 0.42,
+    selfPressure: 14,
+    selfCapacity: 78,
+    calendarBookedPercent: 46,
+    fragmentation: 31,
+    visualDensity: 72,
+  },
+  calendar: [
+    { time: '09:30', title: 'Internal sync', type: 'meeting' },
+    { time: '11:00', title: 'Client review', type: 'review' },
+    { time: '14:00', title: 'Production check', type: 'production' },
+  ],
+  projects: [
+    {
+      id: 'emirates',
+      name: 'Emirates / Finlandia-talo',
+      client: 'Emirates',
+      source: 'Production',
+      color: '#f5c46b',
+      start: '2026-05-05',
+      hMoment: '2026-05-13',
+      effort: 5,
+      manualPressure: 4,
+      notes: 'Phase 01 Cocktail visuals. Photorealistic manipulation, not concepting. Registration desk and carpet must feel physically real.',
+      brief: 'Phase 01 Cocktail: Mannerheimintie entrance, registration, red carpet, cloakroom, dates/coffee point, photo wall, stage, standing tables, champagne service, stair closure with gold posts and red rope.',
+      specs: ['Phase 01 only', 'Photo manipulation quality', 'Layout is source of truth', 'H-hetki locked'],
+      assets: [
+        { label: 'Phase 01 layout', url: '#' },
+        { label: 'Reference board', url: '#' },
+        { label: 'Working PSD folder', url: '#' },
+      ],
+      phases: [
+        { id: 'e1', label: 'Brief', start: '2026-05-05', end: '2026-05-06', intensity: 2, status: 'done' },
+        { id: 'e2', label: 'Visuals', start: '2026-05-06', end: '2026-05-09', intensity: 5, status: 'active' },
+        { id: 'e3', label: 'Comments', start: '2026-05-09', end: '2026-05-11', intensity: 3, status: 'next' },
+        { id: 'e4', label: 'Final export', start: '2026-05-11', end: '2026-05-12', intensity: 5, status: 'next' },
+      ],
+    },
+    {
+      id: 'magic-cloud',
+      name: 'Magic Cloud',
+      client: 'Magic Cloud',
+      source: 'Sales',
+      color: '#67c8ff',
+      start: '2026-05-03',
+      hMoment: '2026-05-22',
+      effort: 3,
+      manualPressure: 1,
+      notes: 'Dark blue, soft, human, cinematic. Avoid generic cloud-tech visuals. “Maaginen pilvikumppani” is an emotional position, not a slogan.',
+      brief: 'Brand and image direction work. Human, clear, strategic, magical but not childish.',
+      specs: ['Main color #1c475a', 'Hyperreal cinematic imagery', 'Magic Cloud filter after generation'],
+      assets: [
+        { label: 'Brand notes', url: '#' },
+        { label: 'Image filter notes', url: '#' },
+      ],
+      phases: [
+        { id: 'm1', label: 'Brand frame', start: '2026-05-03', end: '2026-05-07', intensity: 2, status: 'done' },
+        { id: 'm2', label: 'Image direction', start: '2026-05-08', end: '2026-05-13', intensity: 3, status: 'active' },
+        { id: 'm3', label: 'Review', start: '2026-05-14', end: '2026-05-17', intensity: 2, status: 'next' },
+      ],
+    },
+    {
+      id: 'kpmg',
+      name: 'KPMG AI visuals',
+      client: 'KPMG',
+      source: 'Sales',
+      color: '#9f8cff',
+      start: '2026-05-06',
+      hMoment: '2026-05-19',
+      effort: 4,
+      manualPressure: 2,
+      notes: 'Future-facing, spatial depth, movement. Avoid tunnels, generic grid images, bright white backgrounds and flat compositions.',
+      brief: 'AI key visual direction, prompt batches and deck assets.',
+      specs: ['KPMG Blue / Cobalt / Pacific / Purple', 'No text or logo artifacts', 'Key visual background use'],
+      assets: [
+        { label: 'Prompt batch', url: '#' },
+        { label: 'Key visual refs', url: '#' },
+      ],
+      phases: [
+        { id: 'k1', label: 'Research', start: '2026-05-06', end: '2026-05-08', intensity: 2, status: 'done' },
+        { id: 'k2', label: 'Variations', start: '2026-05-08', end: '2026-05-12', intensity: 4, status: 'active' },
+        { id: 'k3', label: 'Selection', start: '2026-05-13', end: '2026-05-15', intensity: 3, status: 'next' },
+        { id: 'k4', label: 'Deck assets', start: '2026-05-15', end: '2026-05-18', intensity: 3, status: 'next' },
+      ],
+    },
+    {
+      id: 'internal-deck',
+      name: 'ME Studio pitch update',
+      client: 'ME Studio',
+      source: 'Internal',
+      color: '#78f2b7',
+      start: '2026-05-08',
+      hMoment: '2026-05-16',
+      effort: 2,
+      manualPressure: 1,
+      notes: 'Small internal deck and template cleanup. Keep lightweight.',
+      brief: 'Internal pitch update / template pass.',
+      specs: ['Keep reusable', 'No heavy concepting'],
+      assets: [{ label: 'Deck base', url: '#' }],
+      phases: [
+        { id: 'i1', label: 'Collect', start: '2026-05-08', end: '2026-05-09', intensity: 1, status: 'active' },
+        { id: 'i2', label: 'Layout', start: '2026-05-12', end: '2026-05-14', intensity: 2, status: 'next' },
+        { id: 'i3', label: 'Send', start: '2026-05-15', end: '2026-05-16', intensity: 1, status: 'next' },
+      ],
+    },
+  ],
+  incoming: [
+    {
+      id: 'in-prod-1',
+      name: 'Client X / Production print set',
+      source: 'Production',
+      arrival: '2026-05-09',
+      status: 'Moving soon',
+      type: 'print',
+      required: ['brief', 'logos', 'specs'],
+      provided: [],
+    },
+    {
+      id: 'in-sales-1',
+      name: 'Client Y / Sales mockups',
+      source: 'Sales',
+      arrival: '2026-05-10',
+      status: 'Waiting brief',
+      type: 'mockup',
+      required: ['brief', 'images', 'brand assets'],
+      provided: ['brand assets'],
+    },
+    {
+      id: 'in-prod-2',
+      name: 'Client Q / Signage update',
+      source: 'Production',
+      arrival: '2026-05-12',
+      status: 'Created',
+      type: 'signage',
+      required: ['specs', 'logos'],
+      provided: ['logos'],
+    },
+    {
+      id: 'in-sales-2',
+      name: 'Client Z / Pitch deck visuals',
+      source: 'Sales',
+      arrival: '2026-05-15',
+      status: 'Signal',
+      type: 'deck',
+      required: ['brief'],
+      provided: ['brief'],
+    },
+    {
+      id: 'in-prod-3',
+      name: 'Nordic venue / Decor package',
+      source: 'Production',
+      arrival: '2026-05-11',
+      status: 'Created',
+      type: 'decor',
+      required: ['brief', 'dimensions', 'logos'],
+      provided: ['brief'],
+    },
+  ],
+  assets: [
+    { label: 'Adobe Stock / lobby crowd', source: 'Adobe Stock', project: 'Emirates', note: 'Useful scale and people density reference' },
+    { label: 'Envato / champagne service ref', source: 'Envato', project: 'Emirates', note: 'Server pose / tray reference' },
+    { label: 'YouTube / projection lighting', source: 'YouTube', project: 'General', note: 'Motion / atmosphere reference' },
+  ],
+  templates: [
+    { label: 'Brief deck PPT', type: 'presentation' },
+    { label: 'Asset list XLS', type: 'spreadsheet' },
+    { label: 'Mockup templates', type: 'folder' },
+    { label: 'Event visual deck', type: 'presentation' },
+    { label: 'Client presentation base', type: 'presentation' },
+  ],
+};
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : defaultData;
+  } catch {
+    return defaultData;
+  }
+}
+
+function saveData(data) {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch {}
+}
+
+function missingItems(item) {
+  return (item.required || []).filter((r) => !(item.provided || []).includes(r));
+}
+
+function readinessRisk(item) {
+  const days = daysBetween(today, item.arrival);
+  const missing = missingItems(item);
+  const missingCount = missing.length;
+  if (days <= 2 && missingCount >= 2) return { level: 'critical', score: 98, label: 'Full alarm', message: `${plural(missingCount, 'input', 'inputs')} missing, arrival ${days <= 0 ? 'today' : `in ${days}d`}` };
+  if (days <= 2 && missingCount >= 1) return { level: 'high', score: 86, label: 'High alarm', message: `${missing[0]} missing, arrival ${days <= 0 ? 'today' : `in ${days}d`}` };
+  if (days <= 4 && missingCount >= 2) return { level: 'high', score: 78, label: 'High readiness risk', message: `${plural(missingCount, 'input', 'inputs')} missing` };
+  if (days <= 7 && missingCount >= 1) return { level: 'medium', score: 54, label: 'Needs attention', message: `${missing[0]} missing` };
+  return { level: 'ok', score: 12, label: 'Ready enough', message: missingCount ? `${plural(missingCount, 'input', 'inputs')} missing later` : 'Required inputs present' };
+}
+
+function getTimelineRange(projects, incoming) {
+  const dates = [
+    today,
+    ...projects.flatMap((p) => [p.start, p.hMoment, ...p.phases.flatMap((ph) => [ph.start, ph.end])]),
+    ...incoming.map((i) => i.arrival),
+  ].map((d) => new Date(d).getTime());
+  const min = new Date(Math.min(...dates));
+  const max = new Date(Math.max(...dates));
+  min.setDate(min.getDate() - 2);
+  max.setDate(max.getDate() + 3);
+  return { start: iso(min), end: iso(max), days: Math.max(1, daysBetween(min, max)) };
+}
+
+function itemPosition(start, end, range) {
+  const leftRaw = (daysBetween(range.start, start) / range.days) * 100;
+  const widthRaw = (daysBetween(start, end) / range.days) * 100;
+  const left = clamp(leftRaw, 0, 100);
+  const width = clamp(Math.max(widthRaw, 4), 3, 100 - left);
+  return { left: `${left}%`, width: `${width}%` };
+}
+
+function markerPosition(date, range) {
+  return `${clamp((daysBetween(range.start, date) / range.days) * 100, 0, 100)}%`;
+}
+
+function calculateLoad(data) {
+  const { projects, incoming, settings } = data;
+  const activePressure = projects.reduce((sum, project) => {
+    const active = project.phases.find((phase) => phase.status === 'active') || project.phases[0];
+    const daysToH = Math.max(0, daysBetween(today, project.hMoment));
+    const hWeight = daysToH <= 1 ? 20 : daysToH <= 3 ? 15 : daysToH <= 7 ? 10 : daysToH <= 14 ? 6 : 2;
+    const overlap = projects.filter((other) => other.id !== project.id && other.phases.some((phase) => phase.status === 'active')).length;
+    return sum + project.effort * 5 + active.intensity * 4 + hWeight + project.manualPressure * 3 + overlap * 1.4;
+  }, 0);
+
+  const calendarDrag = settings.calendarBookedPercent * 0.38 + settings.fragmentation * 0.24;
+  const capacity = clamp(settings.selfCapacity - calendarDrag, 24, 120);
+  const selfSignal = settings.selfPressure * (settings.selfInputWeight || 0);
+  const soiNow = clamp(Math.round(((activePressure + selfSignal) / capacity) * 100), 0, 128);
+
+  const forecastRisks = incoming.map((item) => ({ ...item, missing: missingItems(item), risk: readinessRisk(item) }));
+  const maxRisk = forecastRisks.reduce((max, item) => Math.max(max, item.risk.score), 0);
+  const soonRiskCount = forecastRisks.filter((item) => item.risk.score >= 78).length;
+  const forecastPressure = clamp(Math.round(soiNow * 0.52 + maxRisk * 0.74 + soonRiskCount * 5), 0, 128);
+  const topRisk = [...forecastRisks].sort((a, b) => b.risk.score - a.risk.score)[0];
+
+  return {
+    activePressure: Math.round(activePressure),
+    capacity: Math.round(capacity),
+    calendarDrag: Math.round(calendarDrag),
+    soiNow,
+    soiForecast: forecastPressure,
+    forecastRisks,
+    topRisk,
+    soonRiskCount,
+  };
+}
+
+function statusFor(score) {
+  if (score >= 105) return 'OVERLOAD';
+  if (score >= 88) return 'CRITICAL';
+  if (score >= 72) return 'HEAVY';
+  if (score >= 52) return 'BUSY';
+  if (score >= 28) return 'STABLE';
+  return 'LIGHT';
+}
+
+function needleRotation(score) {
+  return `${clamp(score, 0, 120) * 1.5 - 90}deg`;
+}
+
+function sourceCounts(incoming) {
+  return incoming.reduce((acc, item) => {
+    acc[item.source] = (acc[item.source] || 0) + 1;
+    return acc;
+  }, {});
+}
+
+function App() {
+  const [data, setData] = useState(loadData);
+  const [selected, setSelected] = useState({ type: 'project', id: data.projects[0]?.id });
+  const [peekOpen, setPeekOpen] = useState(false);
+  const [query, setQuery] = useState('futuristic event lobby');
+  const [theme, setTheme] = useState('deep-space');
+  const [showAddPanel, setShowAddPanel] = useState(false);
+  const range = useMemo(() => getTimelineRange(data.projects, data.incoming), [data.projects, data.incoming]);
+  const load = useMemo(() => calculateLoad(data), [data]);
+  const counts = useMemo(() => sourceCounts(data.incoming), [data.incoming]);
+
+  useEffect(() => saveData(data), [data]);
+  useEffect(() => {
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }, []);
+
+  const selectedProject = selected.type === 'project' ? data.projects.find((p) => p.id === selected.id) || data.projects[0] : null;
+  const selectedIncoming = selected.type === 'incoming' ? data.incoming.find((i) => i.id === selected.id) || null : null;
+
+  function patchSettings(key, value) {
+    setData((prev) => ({ ...prev, settings: { ...prev.settings, [key]: Number(value) } }));
+  }
+
+  function markIncomingReady(id) {
+    setData((prev) => ({
+      ...prev,
+      incoming: prev.incoming.map((item) => item.id === id ? { ...item, provided: [...item.required], status: 'Ready enough' } : item),
+    }));
+  }
+
+  function handleAddIncoming({ name, source, arrival, required }) {
+    if (!name.trim()) return;
+    setData((prev) => ({
+      ...prev,
+      incoming: [
+        { id: `in-${Date.now()}`, name: name.trim(), source, arrival, status: 'Signal', type: 'other', required, provided: [] },
+        ...prev.incoming,
+      ],
+    }));
+    setShowAddPanel(false);
+  }
+
+  function activateIncoming(item) {
+    const start = iso(today);
+    const hMoment = item.arrival;
+    const project = {
+      id: `p-${Date.now()}`,
+      name: item.name,
+      client: item.name.split('/')[0].trim(),
+      source: item.source,
+      color: item.source === 'Production' ? '#f5c46b' : '#67c8ff',
+      start,
+      hMoment,
+      effort: 3,
+      manualPressure: 2,
+      notes: `Activated from ${item.source}. Missing at activation: ${missingItems(item).join(', ') || 'none'}.`,
+      brief: '',
+      specs: item.required || [],
+      assets: [],
+      phases: item.source === 'Production'
+        ? [
+          { id: `ph-${Date.now()}-1`, label: 'Specs', start, end: iso(new Date(today.getTime() + DAY)), intensity: 2, status: 'active' },
+          { id: `ph-${Date.now()}-2`, label: 'Production', start: iso(new Date(today.getTime() + DAY)), end: iso(new Date(today.getTime() + DAY * 2)), intensity: 4, status: 'next' },
+          { id: `ph-${Date.now()}-3`, label: 'Export', start: iso(new Date(today.getTime() + DAY * 2)), end: hMoment, intensity: 4, status: 'next' },
+        ]
+        : [
+          { id: `ph-${Date.now()}-1`, label: 'Brief', start, end: iso(new Date(today.getTime() + DAY)), intensity: 2, status: 'active' },
+          { id: `ph-${Date.now()}-2`, label: 'Mockup', start: iso(new Date(today.getTime() + DAY)), end: iso(new Date(today.getTime() + DAY * 2)), intensity: 3, status: 'next' },
+          { id: `ph-${Date.now()}-3`, label: 'Delivery', start: iso(new Date(today.getTime() + DAY * 2)), end: hMoment, intensity: 4, status: 'next' },
+        ],
+    };
+    setData((prev) => ({ ...prev, projects: [project, ...prev.projects], incoming: prev.incoming.filter((x) => x.id !== item.id) }));
+    setSelected({ type: 'project', id: project.id });
+  }
+
+  function saveReference() {
+    if (!query.trim()) return;
+    setData((prev) => ({
+      ...prev,
+      assets: [
+        { label: `Search / ${query.trim()}`, source: 'Manual search', project: selectedProject?.name || 'General', note: 'Saved from Asset Orbit search phrase' },
+        ...prev.assets,
+      ],
+    }));
+  }
+
+  const highRisk = load.forecastRisks.filter((item) => item.risk.score >= 78);
+  const currentStatus = statusFor(load.soiNow);
+  const forecastStatus = statusFor(load.soiForecast);
+
+  return (
+    <div className={`app theme-${theme}`}>
+      <SpaceBackdrop />
+      <TopBar load={load} currentStatus={currentStatus} forecastStatus={forecastStatus} theme={theme} setTheme={setTheme} />
+
+      <main className="shell">
+        <section className="hero-grid">
+          <OrbitPressureMeter data={data} load={load} currentStatus={currentStatus} forecastStatus={forecastStatus} patchSettings={patchSettings} />
+          <StudioPulse calendar={data.calendar} highRisk={highRisk} load={load} />
+          <IncomingGlance incoming={data.incoming} counts={counts} forecastRisks={load.forecastRisks} onSelect={(id) => { setSelected({ type: 'incoming', id }); setPeekOpen(true); }} peekOpen={peekOpen} setPeekOpen={setPeekOpen} onAddClick={() => setShowAddPanel(true)} />
+        </section>
+
+        <ProductionTimeline projects={data.projects} incoming={data.incoming} range={range} selected={selected} onSelectProject={(id) => setSelected({ type: 'project', id })} onSelectIncoming={(id) => setSelected({ type: 'incoming', id })} />
+
+        <section className="lower-grid">
+          <ProjectPanel project={selectedProject} incoming={selectedIncoming} markIncomingReady={markIncomingReady} activateIncoming={activateIncoming} />
+          <AssetOrbit assets={data.assets} query={query} setQuery={setQuery} saveReference={saveReference} />
+          <DockPanel templates={data.templates} selectedProject={selectedProject} />
+        </section>
+      </main>
+
+      {showAddPanel && <AddIncomingPanel onSubmit={handleAddIncoming} onClose={() => setShowAddPanel(false)} defaultArrival={iso(new Date(today.getTime() + DAY))} />}
+    </div>
+  );
+}
+
+function SpaceBackdrop() {
+  return <div className="space-backdrop"><span /><span /><span /><i /><i /><i /></div>;
+}
+
+function TopBar({ load, currentStatus, forecastStatus, theme, setTheme }) {
+  const now = today.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  const tickerItems = ['Production Timeline', 'Orbit Pressure Meter', 'Incoming Glance', 'GUI-first', 'Asset Orbit', 'Studio Pulse'];
+  return (
+    <header className="topbar glass-panel">
+      <div className="brand-lockup">
+        <div className="eyebrow">DOWE / STUDIO HUB</div>
+        <h1>ME/STUDIO ORBIT</h1>
+      </div>
+      <div className="ticker" aria-label="dashboard ticker" aria-live="off">
+        <div className="ticker-inner" aria-hidden="true">
+          {[...tickerItems, ...tickerItems].map((item, i) => (
+            <React.Fragment key={i}><span>{item}</span><b>•</b></React.Fragment>
+          ))}
+        </div>
+      </div>
+      <div className="top-actions">
+        <div className="clock-chip"><Clock3 size={14} />{now}</div>
+        <div className={`status-chip status-${currentStatus.toLowerCase()}`}>NOW {load.soiNow}</div>
+        <div className={`status-chip status-${forecastStatus.toLowerCase()}`}>FORECAST {load.soiForecast}</div>
+        <button className="theme-button" onClick={() => setTheme(theme === 'deep-space' ? 'sin-city' : 'deep-space')} aria-label="Toggle theme"><SlidersHorizontal size={14} />Theme</button>
+      </div>
+    </header>
+  );
+}
+
+function OrbitPressureMeter({ data, load, currentStatus, forecastStatus, patchSettings }) {
+  return (
+    <article className="meter-card glass-panel">
+      <div className="section-head">
+        <div><Gauge size={20} /><span>Orbit Pressure Meter</span></div>
+        <em>Studio Overload Index</em>
+      </div>
+      <div className="meter-body">
+        <div className="vu-meter" style={{ '--needle': needleRotation(load.soiNow), '--forecast': needleRotation(load.soiForecast) }}>
+          <div className="meter-arc"><span className="arc green" /><span className="arc amber" /><span className="arc red" /></div>
+          <div className="scale-mark mark-0">0</div><div className="scale-mark mark-50">50</div><div className="scale-mark mark-100">100</div>
+          <div className="forecast-needle" title="Forecast peak" />
+          <div className="needle" title="Current pressure" />
+          <div className="pivot" />
+          <div className="meter-glow" />
+          <div className="meter-glass" />
+        </div>
+        <div className="score-stack">
+          <span>SOI NOW</span>
+          <strong>{load.soiNow}</strong>
+          <b className={`status-pill status-${currentStatus.toLowerCase()}`}>{currentStatus}</b>
+          <p>Forecast peak <mark>{load.soiForecast}</mark> / {forecastStatus}</p>
+        </div>
+      </div>
+      <div className="contributor-grid">
+        <div><span>Active pressure</span><strong>{load.activePressure}</strong></div>
+        <div><span>Capacity</span><strong>{load.capacity}</strong></div>
+        <div><span>Calendar drag</span><strong>{load.calendarDrag}</strong></div>
+        <div><span>Readiness alarms</span><strong>{load.soonRiskCount}</strong></div>
+      </div>
+      <div className="control-bank">
+        <label><span>Self pressure</span><input type="range" min="0" max="40" value={data.settings.selfPressure} onChange={(e) => patchSettings('selfPressure', e.target.value)} /></label>
+        <label><span>Self capacity</span><input type="range" min="25" max="120" value={data.settings.selfCapacity} onChange={(e) => patchSettings('selfCapacity', e.target.value)} /></label>
+        <label><span>Calendar booked</span><input type="range" min="0" max="100" value={data.settings.calendarBookedPercent} onChange={(e) => patchSettings('calendarBookedPercent', e.target.value)} /></label>
+        <label><span>Fragmentation</span><input type="range" min="0" max="100" value={data.settings.fragmentation} onChange={(e) => patchSettings('fragmentation', e.target.value)} /></label>
+      </div>
+    </article>
+  );
+}
+
+function StudioPulse({ calendar, highRisk, load }) {
+  return (
+    <article className="studio-pulse glass-panel">
+      <div className="section-head"><div><CalendarDays size={20} /><span>Studio Pulse</span></div><em>Today</em></div>
+      <div className="mini-list">
+        {calendar.map((item) => <div className="mini-row" key={item.time}><span>{item.time}</span><strong>{item.title}</strong><small>{item.type}</small></div>)}
+      </div>
+      <div className={`risk-callout ${highRisk.length ? 'on' : 'ok'}`}>
+        {highRisk.length ? <AlertTriangle size={20} /> : <Sparkles size={20} />}
+        <div>
+          <strong>{highRisk.length ? `${highRisk.length} readiness alarm${highRisk.length > 1 ? 's' : ''}` : 'Forecast stable'}</strong>
+          <p>{highRisk.length ? `${load.topRisk.name}: ${load.topRisk.risk.message}. Fix inputs before arrival to bring forecast back down.` : 'No incoming item is currently close enough and incomplete enough to trigger an alarm.'}</p>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function IncomingGlance({ incoming, counts, forecastRisks, onSelect, peekOpen, setPeekOpen, onAddClick }) {
+  const sorted = [...forecastRisks].sort((a, b) => b.risk.score - a.risk.score);
+  return (
+    <article className="incoming-card glass-panel">
+      <div className="section-head"><div><Radar size={20} /><span>Incoming Glance</span></div><button onClick={onAddClick} aria-label="Add incoming item"><Plus size={14} />Add</button></div>
+      <div className="incoming-stats">
+        <div><span>Sales</span><strong>{counts.Sales || 0}</strong></div>
+        <div><span>Production</span><strong>{counts.Production || 0}</strong></div>
+        <div className="danger"><span>Alarms</span><strong>{sorted.filter((i) => i.risk.score >= 78).length}</strong></div>
+      </div>
+      <button className="peek-button" onClick={() => setPeekOpen(!peekOpen)} aria-expanded={peekOpen}>{peekOpen ? 'Close peek' : 'Peek through airlock'}<ChevronRight size={14} /></button>
+      <div className={`peek-drawer ${peekOpen ? 'open' : ''}`} aria-hidden={!peekOpen}>
+        <div className="peek-drawer-inner">
+          {sorted.map((item) => (
+            <button key={item.id} className={`incoming-item risk-${item.risk.level}`} onClick={() => onSelect(item.id)}>
+              <span>{item.source} / {item.type} / {niceDate(item.arrival)}</span>
+              <strong>{item.name}</strong>
+              <em>{item.risk.label}: {item.missing.length ? item.missing.join(', ') : 'inputs present'}</em>
+            </button>
+          ))}
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function ProductionTimeline({ projects, incoming, range, selected, onSelectProject, onSelectIncoming }) {
+  const ticks = Array.from({ length: range.days + 1 }, (_, index) => {
+    const d = new Date(range.start);
+    d.setDate(d.getDate() + index);
+    return d;
+  }).filter((_, index) => index % 2 === 0 || range.days < 12);
+
+  return (
+    <section className="timeline-panel glass-panel">
+      <div className="section-head timeline-head"><div><Layers3 size={20} /><span>Full-width Production Timeline</span></div><em>Active projects only; incoming stays as signal band</em></div>
+      <div className="timeline-scale">
+        {ticks.map((tick) => <span key={tick.toISOString()} style={{ left: markerPosition(tick, range) }}>{niceDate(tick)}</span>)}
+      </div>
+      <div className="today-line" style={{ left: markerPosition(today, range) }}><span>NOW</span></div>
+      <div className="timeline-rows">
+        {projects.map((project) => (
+          <button key={project.id} className={`timeline-row ${selected.id === project.id ? 'selected' : ''}`} onClick={() => onSelectProject(project.id)}>
+            <div className="project-label">
+              <strong>{project.name}</strong>
+              <span>{project.source} · H {niceDate(project.hMoment)}</span>
+            </div>
+            <div className="track">
+              {project.phases.map((phase) => (
+                <div key={phase.id} className={`phase phase-${phase.status}`} style={{ ...itemPosition(phase.start, phase.end, range), '--project-color': project.color }}>
+                  <span>{phase.label}</span>
+                </div>
+              ))}
+              <div className="h-marker" style={{ left: markerPosition(project.hMoment, range), '--project-color': project.color }}><i />H</div>
+            </div>
+          </button>
+        ))}
+        <div className="incoming-band">
+          <div className="project-label"><strong>Incoming signals</strong><span>Sales + Production / not current load</span></div>
+          <div className="track signal-track">
+            {incoming.map((item) => {
+              const risk = readinessRisk(item);
+              return <button key={item.id} className={`signal-dot risk-${risk.level}`} style={{ left: markerPosition(item.arrival, range) }} onClick={() => onSelectIncoming(item.id)} aria-label={`${item.name}: ${risk.label}`} title={`${item.name}: ${risk.label}`}>{item.source[0]}</button>;
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ProjectPanel({ project, incoming, markIncomingReady, activateIncoming }) {
+  if (incoming) {
+    const missing = missingItems(incoming);
+    const risk = readinessRisk(incoming);
+    return (
+      <article className={`detail-card glass-panel risk-${risk.level}`}>
+        <div className="section-head"><div><RadioTower size={20} /><span>Incoming Detail</span></div><em>{incoming.source}</em></div>
+        <h3>{incoming.name}</h3>
+        <p className="muted">Arrives {niceDate(incoming.arrival)} · {incoming.status} · {incoming.type}</p>
+        <div className="readiness-box">
+          <strong>{risk.label}</strong>
+          <p>{risk.message}</p>
+        </div>
+        <h4>Required inputs</h4>
+        <div className="chip-row">
+          {incoming.required.map((input) => <span key={input} className={incoming.provided.includes(input) ? 'chip ok' : 'chip missing'}>{input}</span>)}
+        </div>
+        <div className="button-row">
+          <button className="primary-action" onClick={() => markIncomingReady(incoming.id)}>Mark ready</button>
+          <button className="ghost-action" onClick={() => activateIncoming(incoming)}>Activate</button>
+        </div>
+        <p className="small-note">Incoming is not current workload. It only triggers forecast alarms when it arrives soon and required inputs are missing.</p>
+      </article>
+    );
+  }
+
+  if (!project) return null;
+  return (
+    <article className="detail-card glass-panel">
+      <div className="section-head"><div><FileText size={20} /><span>Project Detail</span></div><em>{project.client}</em></div>
+      <h3>{project.name}</h3>
+      <p className="muted">{project.source} · H-hetki {niceDate(project.hMoment)}</p>
+      <h4>Brief</h4>
+      <p>{project.brief}</p>
+      <h4>Notes</h4>
+      <p>{project.notes}</p>
+      <h4>Specs</h4>
+      <div className="chip-row">{project.specs.map((item) => <span className="chip" key={item}>{item}</span>)}</div>
+      <h4>Assets</h4>
+      <div className="asset-links">
+        {project.assets.map((asset) => <a key={asset.label} href={asset.url}><LinkIcon size={13} />{asset.label}</a>)}
+      </div>
+    </article>
+  );
+}
+
+function AssetOrbit({ assets, query, setQuery, saveReference }) {
+  const searches = [
+    { label: 'Adobe Stock', url: `https://stock.adobe.com/search?k=${encodeURIComponent(query)}` },
+    { label: 'Envato', url: `https://elements.envato.com/all-items/${encodeURIComponent(query)}` },
+    { label: 'YouTube', url: `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}` },
+    { label: 'Google Images', url: `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}` },
+  ];
+  return (
+    <article className="asset-card glass-panel">
+      <div className="section-head"><div><FolderOpen size={20} /><span>Asset Orbit</span></div><em>Search / save / reference</em></div>
+      <div className="search-box"><Search size={16} /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search references, logos, mockups..." /></div>
+      <div className="source-grid">
+        {searches.map((item) => <a key={item.label} href={item.url} target="_blank" rel="noreferrer"><ArrowUpRight size={14} />{item.label}</a>)}
+      </div>
+      <button className="primary-action wide" onClick={saveReference}>Save search phrase as reference</button>
+      <h4>Recent assets</h4>
+      <div className="asset-list">
+        {assets.slice(0, 5).map((asset) => (
+          <div key={`${asset.label}-${asset.source}`}>
+            <strong>{asset.label}</strong><span>{asset.source} · {asset.project}</span><p>{asset.note}</p>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function DockPanel({ templates, selectedProject }) {
+  const brandBlock = selectedProject ? `${selectedProject.name}: ${selectedProject.notes}` : 'Select a project to get project-specific prompt blocks.';
+  return (
+    <article className="prompt-card glass-panel">
+      <div className="section-head"><div><WandSparkles size={20} /><span>Dock / Prompt Corner</span></div><em>Secondary</em></div>
+      <h4>Templates</h4>
+      <div className="template-grid">{templates.map((item) => <button key={item.label}><Compass size={13} />{item.label}<span>{item.type}</span></button>)}</div>
+      <h4>Prompt block</h4>
+      <div className="prompt-block"><Sparkles size={15} /><p>{brandBlock}</p></div>
+      <h4>Real Life</h4>
+      <div className="real-life-tease"><Star size={15} />REAL LIFE view later: separate shared free-time calendar, same shell, different data.</div>
+    </article>
+  );
+}
+
+const COMMON_INPUTS = ['brief', 'logos', 'specs', 'images', 'brand assets', 'dimensions', 'copy'];
+
+function AddIncomingPanel({ onSubmit, onClose, defaultArrival }) {
+  const [name, setName] = useState('');
+  const [source, setSource] = useState('Production');
+  const [arrival, setArrival] = useState(defaultArrival);
+  const [checked, setChecked] = useState(['brief', 'logos']);
+  const [custom, setCustom] = useState('');
+
+  function toggleInput(input) {
+    setChecked((prev) => prev.includes(input) ? prev.filter((i) => i !== input) : [...prev, input]);
+  }
+
+  function handleSubmit() {
+    const customInputs = custom.split(',').map((s) => s.trim()).filter(Boolean);
+    onSubmit({ name, source, arrival, required: [...checked, ...customInputs] });
+  }
+
+  return (
+    <div className="add-panel-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
+      <div className="add-panel" role="dialog" aria-modal="true" aria-label="Add incoming item">
+        <div className="add-panel-head">
+          <div>
+            <div className="eyebrow">INCOMING GLANCE</div>
+            <h2>New Signal</h2>
+          </div>
+          <button className="add-panel-close" onClick={onClose} aria-label="Close panel">✕</button>
+        </div>
+        <div className="add-panel-body">
+          <div className="add-field">
+            <label htmlFor="inc-name">Project / työnimi</label>
+            <input id="inc-name" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Client / Project name" autoFocus />
+          </div>
+          <div className="add-field">
+            <label>Source</label>
+            <div className="radio-group">
+              {['Production', 'Sales'].map((s) => (
+                <label key={s}>
+                  <input type="radio" name="source" value={s} checked={source === s} onChange={() => setSource(s)} />
+                  <span>{s}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="add-field">
+            <label htmlFor="inc-arrival">Arrival date</label>
+            <input id="inc-arrival" type="date" value={arrival} onChange={(e) => setArrival(e.target.value)} />
+          </div>
+          <div className="add-field">
+            <label>Required inputs</label>
+            <div className="checkbox-group">
+              {COMMON_INPUTS.map((input) => (
+                <label key={input}>
+                  <input type="checkbox" checked={checked.includes(input)} onChange={() => toggleInput(input)} />
+                  <span>{input}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+          <div className="add-field">
+            <label htmlFor="inc-custom">Custom inputs (comma separated)</label>
+            <input id="inc-custom" type="text" value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="e.g. measurements, video files" />
+          </div>
+        </div>
+        <div className="add-panel-footer">
+          <button className="primary-action" onClick={handleSubmit} disabled={!name.trim()}>Add to pipeline</button>
+          <button className="ghost-action" onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
