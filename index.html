@@ -130,13 +130,13 @@ button { color: inherit; }
   max-width: 1740px;
   margin: 0 auto 16px;
   display: grid;
-  grid-template-columns: minmax(250px, 0.8fr) minmax(320px, 1.05fr) auto;
+  grid-template-columns: minmax(200px, 0.8fr) minmax(280px, 1.05fr) auto;
   align-items: center;
   gap: 18px;
   padding: 17px 19px;
   border-radius: 26px;
 }
-.brand-lockup h1 { margin: 4px 0 0; font-size: clamp(30px, 3.6vw, 54px); line-height: .9; letter-spacing: -.07em; }
+.brand-lockup h1 { margin: 4px 0 0; font-size: clamp(20px, 3.6vw, 54px); line-height: .9; letter-spacing: -.07em; }
 .eyebrow { color: var(--cyan); font: 800 11px/1.2 "JetBrains Mono", monospace; letter-spacing: .18em; text-transform: uppercase; }
 .ticker {
   min-width: 0; height: 42px;
@@ -351,8 +351,24 @@ p { line-height: 1.52; }
 
 @media (max-width: 1260px) {
   .hero-grid, .lower-grid { grid-template-columns: 1fr; }
-  .topbar { grid-template-columns: 1fr; }
-  .top-actions { justify-content: flex-start; }
+  .topbar {
+    grid-template-columns: 1fr auto;
+    gap: 10px 8px;
+    padding: 12px 14px;
+    border-radius: 18px;
+  }
+  .brand-lockup { grid-column: 1; grid-row: 1; }
+  .ticker { display: none; }
+  .top-actions {
+    grid-column: 2;
+    grid-row: 1;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 6px;
+    align-self: center;
+  }
+  .clock-chip { display: none; }
+  .status-chip, .theme-button { height: 30px; font-size: 10px; padding: 0 9px; gap: 5px; }
   .timeline-row, .incoming-band { grid-template-columns: 140px 1fr; }
   .timeline-scale { margin-left: 154px; }
 }
